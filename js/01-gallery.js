@@ -28,10 +28,19 @@ function createCardsGallery(elements) {
 const cardsGallery = createCardsGallery(galleryItems);
 galleryContainer.insertAdjacentHTML("beforeend", cardsGallery);
 
-const galleryLinks = document.querySelectorAll("a.gallery__link");
+function handleGalleryClick(event) {
+  event.preventDefault();
 
-galleryLinks.forEach((link) => {
-  link.addEventListener("click", (event) => {
-    event.preventDefault();
-  });
-});
+  if (event.target.nodeName !== "IMG") {
+    return;
+  }
+  const bigModalImg = event.target.dataset.source;
+
+  const instance = basicLightbox.create(`
+    <img src="${bigModalImg}" width="800" height="600">
+`);
+
+  instance.show();
+}
+
+galleryContainer.addEventListener("click", handleGalleryClick);
