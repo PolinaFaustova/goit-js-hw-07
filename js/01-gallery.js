@@ -7,6 +7,7 @@ import { galleryItems } from "./gallery-items.js";
 console.log(galleryItems);
 
 const galleryContainer = document.querySelector(".gallery");
+let instance = null;
 
 function createCardsGallery(elements) {
   return elements
@@ -14,7 +15,7 @@ function createCardsGallery(elements) {
       return `<div class="gallery__item">
     <a class="gallery__link" href="${original}">
       <img
-        class="gallery__image"
+        class="gallery__image lazyload"
         src="${preview}"
         data-source="${original}"
         alt="${description}"
@@ -28,6 +29,13 @@ function createCardsGallery(elements) {
 const cardsGallery = createCardsGallery(galleryItems);
 galleryContainer.insertAdjacentHTML("beforeend", cardsGallery);
 
+function handleModalEscape(event) {
+  if (event.code === "Escape" && instance.visible()) {
+    instance.close();
+    document.removeEventListener("keydown", handleModalEscape);
+  }
+}
+
 function handleGalleryClick(event) {
   event.preventDefault();
 
@@ -36,11 +44,12 @@ function handleGalleryClick(event) {
   }
   const bigModalImg = event.target.dataset.source;
 
-  const instance = basicLightbox.create(`
+  instance = basicLightbox.create(`
     <img src="${bigModalImg}" width="800" height="600">
 `);
-
   instance.show();
+
+  document.addEventListener("keydown", handleModalEscape);
 }
 
 galleryContainer.addEventListener("click", handleGalleryClick);
