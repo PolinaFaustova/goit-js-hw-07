@@ -32,7 +32,7 @@ galleryContainer.insertAdjacentHTML("beforeend", cardsGallery);
 function handleModalEscape(event) {
   if (event.code === "Escape" && instance.visible()) {
     instance.close();
-    document.removeEventListener("keydown", handleModalEscape);
+    galleryContainer.removeEventListener("keydown", handleModalEscape);
   }
 }
 
@@ -49,7 +49,7 @@ function handleGalleryClick(event) {
 `);
   instance.show();
 
-  document.addEventListener("keydown", handleModalEscape);
+  galleryContainer.addEventListener("keydown", handleModalEscape);
 }
 
 galleryContainer.addEventListener("click", handleGalleryClick);
